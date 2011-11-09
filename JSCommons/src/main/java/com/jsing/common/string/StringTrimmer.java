@@ -43,6 +43,18 @@ public class StringTrimmer {
         }
         return this;
     }
+    
+    public StringTrimmer getAfterLast(String stringToSearch) {
+        if (this.string == null)
+            return this;
+        int index = getLastIndex(stringToSearch);
+        if (index > -1) {
+            this.start = Math.min(this.end, index + stringToSearch.length());
+        } else {
+            this.start = this.end;
+        }
+        return this;
+    }
 
     private int getIndex(String stringToSearch) {
         if (stringToSearch == null)
@@ -55,7 +67,10 @@ public class StringTrimmer {
             return -1;
 
         // TODO: better implementation
-        return this.toString().lastIndexOf(stringToSearch)+this.start;
+        int index = this.toString().lastIndexOf(stringToSearch);
+        if(index>-1)
+            index = index+this.start;
+        return index;
     }
 
     @Override
