@@ -29,7 +29,7 @@ public class StringTrimmerTest {
         assertEquals("aaa", new StringTrimmer("bcdeaaa").getAfterLast("d").getAfterLast("e").toString());
         assertEquals("b", new StringTrimmer("aaab").getAfterLast("a").toString());
     }
-    
+
     @Test
     public void testGetBeforeNext() {
         assertEquals("aaa", new StringTrimmer("aaaBBBcccaaaccc").getBeforeNext("BBB").toString());
@@ -41,7 +41,7 @@ public class StringTrimmerTest {
         assertEquals("aaa", new StringTrimmer("aaabcde").getBeforeNext("b").getBeforeNext("c").toString());
         assertEquals("b", new StringTrimmer("baaab").getBeforeNext("a").toString());
     }
-    
+
     @Test
     public void testGetBeforeLast() {
         assertEquals("aaaBBBccc", new StringTrimmer("aaaBBBcccBBBccc").getBeforeLast("BBB").toString());

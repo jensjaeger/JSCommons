@@ -13,18 +13,34 @@ public class StringTrimmer {
     }
 
     public StringTrimmer getAfterNext(String stringToSearch) {
+        return getAfterNext(stringToSearch, false);
+    }
+
+    /**
+     * retains the substring after the stringToSearch, including the
+     * stringToSearch.
+     */
+    public StringTrimmer getAfterNextInc(String stringToSearch) {
+        return getAfterNext(stringToSearch, true);
+    }
+
+    private StringTrimmer getAfterNext(String stringToSearch, boolean includeSearchString) {
         if (this.string == null)
             return this;
         int index = getIndex(stringToSearch);
-        if (index > -1) {
-            this.start = Math.min(this.end, index + stringToSearch.length());
-        } else {
-            this.start = this.end;
-        }
+        calcNewStart(index, stringToSearch, includeSearchString);
         return this;
     }
 
     public StringTrimmer getBeforeNext(String stringToSearch) {
+        return getBeforeNext(stringToSearch, false);
+    }
+
+    public StringTrimmer getBeforeNextInc(String stringToSearch) {
+        return getBeforeNext(stringToSearch, true);
+    }
+
+    private StringTrimmer getBeforeNext(String stringToSearch, boolean includeSearchString) {
         if (this.string == null)
             return this;
         int index = getIndex(stringToSearch);
@@ -35,25 +51,55 @@ public class StringTrimmer {
     }
 
     public StringTrimmer getBeforeLast(String stringToSearch) {
+        return getBeforeLast(stringToSearch, false);
+    }
+
+    public StringTrimmer getBeforeLastInc(String stringToSearch) {
+        return getBeforeLast(stringToSearch, true);
+    }
+
+    private StringTrimmer getBeforeLast(String stringToSearch, boolean includeSearchString) {
         if (this.string == null)
             return this;
         int index = getLastIndex(stringToSearch);
-        if (index > -1) {
-            this.end = Math.max(this.start, index);
-        }
+        calcNewEnd(index, stringToSearch, includeSearchString);
         return this;
     }
-    
+
     public StringTrimmer getAfterLast(String stringToSearch) {
+        return getAfterLast(stringToSearch, false);
+    }
+
+    public StringTrimmer getAfterLastInc(String stringToSearch) {
+        return getAfterLast(stringToSearch, true);
+    }
+
+    private StringTrimmer getAfterLast(String stringToSearch, boolean includeSearchString) {
         if (this.string == null)
             return this;
         int index = getLastIndex(stringToSearch);
+        calcNewStart(index, stringToSearch, includeSearchString);
+        return this;
+    }
+
+    private void calcNewStart(int index, String stringToSearch, boolean includeSearchString) {
         if (index > -1) {
-            this.start = Math.min(this.end, index + stringToSearch.length());
+            int newEnd = index;
+            if (!includeSearchString)
+                newEnd += stringToSearch.length();
+            this.start = Math.min(this.end, newEnd);
         } else {
             this.start = this.end;
         }
-        return this;
+    }
+
+    private void calcNewEnd(int index, String stringToSearch, boolean includeSearchString) {
+        if (index > -1) {
+            int newEnd = index;
+            if (includeSearchString)
+                newEnd += stringToSearch.length();
+            this.end = Math.max(this.start, newEnd);
+        }
     }
 
     private int getIndex(String stringToSearch) {
@@ -67,9 +113,19 @@ public class StringTrimmer {
             return -1;
 
         // TODO: better implementation
+
         int index = this.toString().lastIndexOf(stringToSearch);
-        if(index>-1)
-            index = index+this.start;
+        if (index > -1)
+            index = index + this.start;
+
+        // TODO: better implementation
+        // int index = this.string.lastIndexOf(stringToSearch, this.end); //
+        // this.toString().lastIndexOf(stringToSearch);
+        // if (index > -1 && index >= this.start) {
+        // index = index + this.start;
+        // } else {
+        // index = -1;
+        // }
         return index;
     }
 
